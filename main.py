@@ -14,7 +14,7 @@ class Student:
             else:
                 lecturer.grades[course] = [grade]
         else:
-            print('Ошибка')
+            print('Ошибка st')
     
     def _gpa(self):
         return Lecturer._gpa(self)
@@ -51,7 +51,7 @@ class Reviewer(Mentor):
             else:
                 student.grades[course] = [grade]
         else:
-            print('Ошибка')
+            print('Ошибка rew')
     
     def __str__(self):
         f = f"Имя: {self.name}\nФамилия: {self.surname}"
@@ -84,27 +84,30 @@ class Lecturer(Mentor):
 
 
 student1 = Student("Вася", "Васильев", "М")
-student1.courses_in_progress += ['Python', 'git']
+student1.courses_in_progress += ['Python', 'Git']
 student1.finished_courses += ['Введение в программирование']
 
 student2 = Student("Петя", "Петров", "М")
-student2.courses_in_progress += ['Python']
-
-student3 = Student("Федр", "Рогов", "М")
-student3.courses_in_progress += ['Git']
+student2.courses_in_progress += ['Python', 'Git']
+student2.finished_courses += ['Введение в программирование', 'Англиский для программистов']
 
 
-student4 = Student("Саша", "Михеев", "М")
-student4.courses_in_progress += ['Python', "Git"]
+
+reviewer1 = Reviewer("Оксана", "Петрова")
+reviewer1.courses_attached += ['Python','Git']
+reviewer1.rate_hw(student1, "Python", 10)
+reviewer1.rate_hw(student1, "Git", 5)
+reviewer1.rate_hw(student2, "Python", 9)
+reviewer1.rate_hw(student2, "Git", 8)
+
+reviewer2 = Reviewer("Оксана", "Петрова")
+reviewer2.courses_attached += ['Python','Git']
+reviewer2.rate_hw(student1, "Python", 10)
+reviewer2.rate_hw(student1, "Git", 9)
+reviewer2.rate_hw(student2, "Python", 10)
+reviewer2.rate_hw(student2, "Git", 9)
 
 
-reviewer = Reviewer("Оксана", "Петрова")
-
-reviewer.courses_attached += ['Python','git']
-
-reviewer.rate_hw(student1, "Python", 10)
-reviewer.rate_hw(student1, "git", 5)
-reviewer.rate_hw(student2, "Python", 10)
 
 lecturer1 = Lecturer("Геннадий", "Болобанов")
 lecturer1.courses_attached += ['Python', "Git"]
@@ -112,29 +115,43 @@ lecturer1.courses_attached += ['Python', "Git"]
 lecturer2 = Lecturer("Вася", "Рогов")
 lecturer2.courses_attached += ['Python', "Git"]
 
-student1.evaluation(lecturer2, "Python", 1)
-student2.evaluation(lecturer2, "Python", 1)
-student3.evaluation(lecturer2, "Git", 1)
-student4.evaluation(lecturer2, "Python", 1)
-student4.evaluation(lecturer2, "Git", 1)
-
 student1.evaluation(lecturer1, "Python", 10)
 student2.evaluation(lecturer1, "Python", 10)
-student3.evaluation(lecturer1, "Git", 10)
-student4.evaluation(lecturer1, "Python", 10)
-student4.evaluation(lecturer1, "Git", 10)
 
-# print(student1.grades)
-# print(student2.grades)
+student1.evaluation(lecturer2, "Python", 7)
+student2.evaluation(lecturer2, "Python", 8)
 
-# print(lecturer.grades)
+student1.evaluation(lecturer1, "Git", 8)
+student2.evaluation(lecturer1, "Git", 4)
 
-# print(reviewer)
+student1.evaluation(lecturer2, "Git", 10)
+student2.evaluation(lecturer2, "Git", 8)
+
+print(student1)
+print(student2)
+print(student1 > student2)
+
 print(lecturer1)
 print(lecturer2)
+print(lecturer1 < lecturer2)
 
-# print(student1)
 
-print( lecturer1 < lecturer2 )
+student_list = [student1, student2]
+lecturer_list = [lecturer1, lecturer2]
 
-print(student1 < student2)
+def gpa(list, curse):
+    if isinstance(list[1], Lecturer):
+        str = "Cредняя оценка за лекции всех лекторов в рамках курса:"
+    elif isinstance(list[1], Student):
+        str = "Cредняя оценка за домашние задания по всем студентам в рамках курса:"
+    summ = 0
+    i = 0
+    for el in list:
+        summ += sum(el.grades[curse])
+        i += len(el.grades[curse])
+
+    print(f"{str} {curse} ровна: {summ / i}")
+
+gpa(student_list, 'Git')
+gpa(lecturer_list, 'Python')
+    
